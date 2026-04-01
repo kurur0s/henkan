@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>henkan</title>
+  <title>Lyrics Romanizer</title>
 
   <!-- Kuroshiro + Kuromoji (client-side Japanese romanization) -->
   <script src="https://cdn.jsdelivr.net/npm/kuroshiro@1.2.0/dist/kuroshiro.min.js"></script>
@@ -281,7 +281,7 @@
 <body>
 
 <header>
-  <h1>henkan <span>Lyrics Romanizer</span></h1>
+  <h1>Lyrics <span>Romanizer</span></h1>
   <p class="tagline">Japanese · Genius API · Furigana &amp; Romaji</p>
 </header>
 
@@ -378,12 +378,13 @@ function setStatus(msg, loading = false) {
 //  Genius search
 // ─────────────────────────────────────────────
 async function searchGenius(query) {
-  const url = `https://api.genius.com/search?q=${encodeURIComponent(query)}&per_page=8`;
-  const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${CONFIG.GENIUS_ACCESS_TOKEN}` }
-  });
-  if (!res.ok) throw new Error(`Genius API error: ${res.status}`);
-  const data = await res.json();
+  const apiUrl = `https://api.genius.com/search?q=${encodeURIComponent(query)}&per_page=8&access_token=${CONFIG.GENIUS_TOKEN}`;
+  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
+  const res = await fetch(proxy);
+  if (!res.ok) throw new Error(`Proxy error: ${res.status}`);
+  const { contents } = await res.json();
+  const data = JSON.parse(contents);
+  if (data.error) throw new Error(data.error);
   return data.response.hits.map(h => h.result);
 }
 
