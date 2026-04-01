@@ -379,11 +379,10 @@ function setStatus(msg, loading = false) {
 // ─────────────────────────────────────────────
 async function searchGenius(query) {
   const apiUrl = `https://api.genius.com/search?q=${encodeURIComponent(query)}&per_page=8&access_token=${CONFIG.GENIUS_TOKEN}`;
-  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(apiUrl)}`;
+  const proxy = `https://corsproxy.io/?url=${encodeURIComponent(apiUrl)}`;
   const res = await fetch(proxy);
   if (!res.ok) throw new Error(`Proxy error: ${res.status}`);
-  const { contents } = await res.json();
-  const data = JSON.parse(contents);
+  const data = await res.json();
   if (data.error) throw new Error(data.error);
   return data.response.hits.map(h => h.result);
 }
@@ -392,10 +391,10 @@ async function searchGenius(query) {
 //  Fetch lyrics via allorigins CORS proxy
 // ─────────────────────────────────────────────
 async function fetchLyrics(geniusUrl) {
-  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(geniusUrl)}`;
+  const proxy = `https://corsproxy.io/?url=${encodeURIComponent(geniusUrl)}`;
   const res = await fetch(proxy);
   if (!res.ok) throw new Error("Proxy fetch failed");
-  const { contents } = await res.json();
+  const contents = await res.text();
 
   // Parse the HTML response
   const parser = new DOMParser();
