@@ -349,19 +349,32 @@ const modeButtons  = document.querySelectorAll(".mode-toggle button");
 // ─────────────────────────────────────────────
 //  Kuroshiro init
 // ─────────────────────────────────────────────
+let kuroshiroInitPromise = null;
+
 async function initKuroshiro() {
   if (kuroshiroReady) return;
-  setStatus("Loading Japanese analyzer…", true);
-  try {
-    kuroshiro = new Kuroshiro();
-    await kuroshiro.init(new KuromojiAnalyzer({
-      dictPath: "https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict"
-    }));
-    kuroshiroReady = true;
-    setStatus("");
-  } catch(e) {
-    setStatus("Failed to load analyzer: " + e.message);
-  }
+  if (kuroshiroInitPromise) return kuroshiroInitPromise;
+
+  kuroshiroInitPromise = (async () => {
+    setStatus("Loading Japanese analyzer… (first time may take ~10s)", true);
+    try {
+      if (typeof Kuroshiro === "undefined" || typeof KuromojiAnalyzer === "undefined") {
+        throw new Error("Kuroshiro or KuromojiAnalyzer not loaded. Check your internet connection.");
+      }
+      kuroshiro = new Kuroshiro();
+      await kuroshiro.init(new KuromojiAnalyzer({
+        dictPath: "https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict"
+      }));
+      kuroshiroReady = true;
+      setStatus("");
+    } catch(e) {
+      kuroshiro = null;
+      kuroshiroInitPromise = null;
+      throw e;
+    }
+  })();
+
+  return kuroshiroInitPromise;
 }
 
 // ─────────────────────────────────────────────
@@ -427,7 +440,10 @@ async function fetchLyrics(geniusUrl) {
 //  Romanize helpers
 // ─────────────────────────────────────────────
 async function convertLyrics(text, mode) {
-  if (!kuroshiroReady) await initKuroshiro();
+  if (!kuroshiroReady) {
+    await initKuroshiro();
+    if (!kuroshiroReady) throw new Error("Japanese analyzer failed to load. Try refreshing the page.");
+  }
   if (mode === "original") return null; // handled separately
 
   const lines = text.split("\n");
