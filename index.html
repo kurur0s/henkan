@@ -394,7 +394,7 @@ function setStatus(msg, loading = false) {
 //  Genius search
 // ─────────────────────────────────────────────
 async function searchGenius(query) {
-  const apiUrl = `https://api.genius.com/search?q=${encodeURIComponent(query)}&per_page=8&access_token=${CONFIG.GENIUS_TOKEN}`;
+  const apiUrl = `https://api.genius.com/search?q=${encodeURIComponent(query)}&per_page=8&access_token=${CONFIG.GENIUS_ACCESS_TOKEN}`;
   const proxy = `https://corsproxy.io/?url=${encodeURIComponent(apiUrl)}`;
   const res = await fetch(proxy);
   if (!res.ok) throw new Error(`Proxy error: ${res.status}`);
