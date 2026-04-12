@@ -366,7 +366,7 @@ async function initKuroshiro() {
       const AnalyzerClass  = KuromojiAnalyzer.default || KuromojiAnalyzer;
       kuroshiro = new KuroshiroClass();
       await kuroshiro.init(new AnalyzerClass({
-        dictPath: "https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict"
+        dictPath: "/henkan/dict"
       }));
       kuroshiroReady = true;
       setStatus("");
