@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lyrics Romanizer</title>
+  <title>henkan</title>
 
   <!-- Kuroshiro + Kuromoji (client-side Japanese romanization) -->
   <script src="https://cdn.jsdelivr.net/npm/kuroshiro@1.2.0/dist/kuroshiro.min.js"></script>
@@ -11,7 +11,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -22,10 +22,10 @@
       --border:   #e0ddd6;
       --text:     #1a1916;
       --muted:    #8a8780;
-      --accent:   #c8502a;
-      --accent2:  #2a6ec8;
-      --mono:     'DM Mono', monospace;
-      --serif:    'DM Serif Display', serif;
+      --accent:   #2a6ec8;
+      --accent2:  #2aaec8;
+      --mono:     'Montserrat', monospace;
+      --serif:    'Montserrat', serif;
       --radius:   6px;
       --shadow:   0 1px 3px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
     }
@@ -281,8 +281,8 @@
 <body>
 
 <header>
-  <h1>Lyrics <span>Romanizer</span></h1>
-  <p class="tagline">Japanese · Genius API · Furigana &amp; Romaji</p>
+  <h1>henkan <span>lyrics romanizer</span></h1>
+  <p class="tagline">Genius Lyrics · LyricsDB · Netease</p>
 </header>
 
 <main>
@@ -356,7 +356,7 @@ async function initKuroshiro() {
   if (kuroshiroInitPromise) return kuroshiroInitPromise;
 
   kuroshiroInitPromise = (async () => {
-    setStatus("Loading Japanese analyzer… (first time may take ~10s)", true);
+    setStatus("Loading Japanese analyzer", true);
     try {
       if (typeof Kuroshiro === "undefined" || typeof KuromojiAnalyzer === "undefined") {
         throw new Error("Kuroshiro or KuromojiAnalyzer not loaded. Check your internet connection.");
@@ -379,7 +379,6 @@ async function initKuroshiro() {
 
   return kuroshiroInitPromise;
 }
-
 // ─────────────────────────────────────────────
 //  Status helper
 // ─────────────────────────────────────────────
