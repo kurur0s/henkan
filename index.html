@@ -454,7 +454,7 @@ async function convertLyrics(text, mode) {
     if (mode === "furigana") {
       return await kuroshiro.convert(line, { mode: "furigana", to: "hiragana" });
     } else if (mode === "romaji") {
-      return await kuroshiro.convert(line, { mode: "normal", to: "romaji", romajiSystem: "hepburn" });
+      return await kuroshiro.convert(line, { mode: "spaced", to: "romaji", romajiSystem: "hepburn" });
     } else if (mode === "hiragana") {
       return await kuroshiro.convert(line, { mode: "normal", to: "hiragana" });
     }
